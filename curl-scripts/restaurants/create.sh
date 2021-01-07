@@ -7,10 +7,12 @@ curl "${API}${URL_PATH}" \
   --header "Content-Type: application/json" \
   --header "Authorization: Bearer ${TOKEN}" \
   --data '{
-    "name": "'"${NAME}"'",
-    "cuisine": "'"${CUISINE}"'",
-    "location": "'"${LOCATION}"'",
-    "price": "'"${PRICE}"'"
+    "restaurant": {
+      "name": "'"${NAME}"'",
+      "cuisine": "'"${CUISINE}"'",
+      "location": "'"${LOCATION}"'",
+      "price": "'"${PRICE}"'"
+    }
   }'
 
 echo
