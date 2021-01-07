@@ -15,10 +15,6 @@ const restaurantSchema = new mongoose.Schema({
   price: {
     type: String,
     required: true
-  },
-  owner: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User'
   }
 }, {
   timestamps: true

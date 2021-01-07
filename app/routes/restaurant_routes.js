@@ -14,6 +14,6 @@ router.post('/restaurants', requireToken, (req, res, next) => {
   Restaurant.create(restaurantData)
     .then(restaurantData => {
       res.status(201).json({ restaurantData: restaurantData })
+        .catch(next)
     })
-    .catch(next)
 })
