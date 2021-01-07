@@ -16,4 +16,9 @@ router.post('/restaurants', requireToken, (req, res, next) => {
     .catch(next)
 })
 
+// find /restaurants
+router.get('restaurants'), requireToken, (req, res, next) => {
+  Restaurant.find({ owner: req.user._id})
+}
+
 module.exports = router
