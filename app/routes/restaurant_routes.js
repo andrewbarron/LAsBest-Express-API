@@ -16,14 +16,17 @@ router.post('/restaurants', requireToken, (req, res, next) => {
     .catch(next)
 })
 
-// find /restaurants
+// index
 router.get('/restaurants', requireToken, (req, res, next) => {
-  Restaurant.find({ owner: req.user._id })
-    .then(restaurant => res.status(201).json({ restaurant: restaurant }))
+  Restaurant.find()
+    .then(restaurant => {
+      return restaurant.map(restaurant => restaurant.toObject())
+    })
+    .then(restaurant => res.status(200).json({ restaurant: restaurant }))
     .catch(next)
 })
 
-// show one /restaurant
+// show  /restaurant
 router.get('/restaurant/:id', requireToken, (req, res, next) => {
   const id = req.params.id
   Restaurant.findById(id)
