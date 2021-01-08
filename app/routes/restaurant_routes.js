@@ -18,11 +18,9 @@ router.post('/restaurants', requireToken, (req, res, next) => {
 
 // index
 router.get('/restaurants', requireToken, (req, res, next) => {
-  Restaurant.find()
-    .then(restaurant => {
-      return restaurant.map(restaurant => restaurant.toObject())
-    })
-    .then(restaurant => res.status(200).json({ restaurant: restaurant }))
+  Restaurant.find({ owner: req.user._id })
+    .populate('restaurant')
+    .then(restaurant => res.status(201).json({ restaurant: restaurant }))
     .catch(next)
 })
 
@@ -35,4 +33,32 @@ router.get('/restaurants/:id', requireToken, (req, res, next) => {
     })
 })
 
+// DELETE
+// DESTORY /restaurants/
+router.delete('/restaurants/:id', requireToken, (req, res, next) => {
+  const id = req.params.id
+  Restaurant.findById(id)
+    .then(restaurant => restaurant.deleteOne())
+    .then(() => res.sendStatus(204))
+    .catch(next)
+})
+
+// UPDATE
+// PATCH /restaurants/:id
+router.patch('/restaurants/:id', requireToken, (req, res, next) => {
+  const id = req.params.id
+  // if the client attempts to change the `owner` property by including a new
+  // owner, prevent that by deleting that key/value pair
+  delete req.body.restaurant.owner
+  Restaurant.findOne({
+    _id: id,
+    owner: req.user._id
+  })
+  // Restaurant.findOneAndUpdate({ _id: id, owner: req.user._id }, req.body.restaurant)
+    .then(restaurant => restaurant.updateOne(req.body.restaurant))
+    // if that succeeded, return 204 and no JSON
+    .then(() => res.status(200).json({ restaurant: req.body.restaurant }))
+    // if an error occurs, pass it to the handler
+    .catch(next)
+})
 module.exports = router
