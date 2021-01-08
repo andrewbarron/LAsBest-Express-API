@@ -9,7 +9,7 @@ router.post('/restaurants', requireToken, (req, res, next) => {
   // get data from request
   const restaurantData = req.body.restaurant
   // add user as restaurant owner
-  restaurantData.owner = req.params.id
+  restaurantData.owner = req.user._id
   // create the restaurant
   Restaurant.create(restaurantData)
     .then(restaurantData => res.status(201).json({ restaurantData: restaurantData }))
@@ -27,11 +27,12 @@ router.get('/restaurants', requireToken, (req, res, next) => {
 })
 
 // show  /restaurant
-router.get('/restaurant/:id', requireToken, (req, res, next) => {
+router.get('/restaurants/:id', requireToken, (req, res, next) => {
   const id = req.params.id
   Restaurant.findById(id)
-    .then(restaurant => res.status(201).json({ restaurant: restaurant }))
-    .catch(next)
+    .then((restaurant) => {
+      res.status(201).json({ restaurant: restaurant })
+    })
 })
 
 module.exports = router
