@@ -3,6 +3,9 @@ const passport = require('passport')
 const router = express.Router()
 const Restaurant = require('../models/restaurant')
 const requireToken = passport.authenticate('bearer', { session: false })
+const customErrors = require('../../lib/custom_errors')
+const requireOwnership = customErrors.requireOwnership
+const handle404 = customErrors.handle404
 
 // create a restaurant
 router.post('/restaurants', requireToken, (req, res, next) => {
@@ -12,7 +15,7 @@ router.post('/restaurants', requireToken, (req, res, next) => {
   restaurantData.owner = req.user._id
   // create the restaurant
   Restaurant.create(restaurantData)
-    .then(restaurantData => res.status(201).json({ restaurantData: restaurantData }))
+    .then(restaurant => res.status(201).json({ restaurant: restaurant }))
     .catch(next)
 })
 
@@ -27,10 +30,13 @@ router.get('/restaurants', requireToken, (req, res, next) => {
 // show  /restaurant
 router.get('/restaurants/:id', requireToken, (req, res, next) => {
   const id = req.params.id
-  Restaurant.findById(id)
-    .then((restaurant) => {
-      res.status(201).json({ restaurant: restaurant })
-    })
+  Restaurant.findOne({
+    _id: id,
+    owner: req.user._id
+  })
+    .then(handle404)
+    .then(restaurant => res.status(200).json({ restaurant: restaurant.toObject() }))
+    .catch(next)
 })
 
 // DELETE
@@ -47,9 +53,6 @@ router.delete('/restaurants/:id', requireToken, (req, res, next) => {
 // PATCH /restaurants/:id
 router.patch('/restaurants/:id', requireToken, (req, res, next) => {
   const id = req.params.id
-  // if the client attempts to change the `owner` property by including a new
-  // owner, prevent that by deleting that key/value pair
-  delete req.body.restaurant.owner
   Restaurant.findOne({
     _id: id,
     owner: req.user._id
