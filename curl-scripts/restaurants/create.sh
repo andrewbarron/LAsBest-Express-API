@@ -10,8 +10,7 @@ curl "${API}${URL_PATH}" \
     "restaurant": {
       "name": "'"${NAME}"'",
       "cuisine": "'"${CUISINE}"'",
-      "location": "'"${LOCATION}"'",
-      "price": "'"${PRICE}"'"
+      "location": "'"${LOCATION}"'"
     }
   }'
 
