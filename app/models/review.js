@@ -16,12 +16,6 @@ const reviewSchema = new mongoose.Schema({
   value: {
     type: String,
     required: true
-  },
-  reviewer: {
-    // References use the type ObjectId
-    type: mongoose.Schema.Types.ObjectId,
-    // the name of the model to which they refer
-    ref: 'User'
   }
 }, {
   timestamps: true
