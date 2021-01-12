@@ -22,3 +22,5 @@ router.post('/reviews', (req, res, next) => {
     .then(restaurant => res.status(201).json({restaurant: restaurant}))
     .catch(next)
 })
+
+module.exports = router

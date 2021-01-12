@@ -8,6 +8,7 @@ const exampleRoutes = require('./app/routes/example_routes')
 const userRoutes = require('./app/routes/user_routes')
 const restaurantRoutes = require('./app/routes/restaurant_routes')
 const reviewRoutes = require('./app/routes/review_routes')
+
 // require middleware
 const errorHandler = require('./lib/error_handler')
 const requestLogger = require('./lib/request_logger')
