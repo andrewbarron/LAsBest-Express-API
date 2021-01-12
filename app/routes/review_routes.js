@@ -9,7 +9,6 @@ router.post('/reviews', (req, res, next) => {
   // get the review data from the body of the request
   const reviewData = req.body.review
   const restaurantId = reviewData.restaurantId
-  reviewData.reviewer = req.user._id
   // find the restaurant by its id
   Restaurant.findById(restaurantId)
     // .then(handle404)
