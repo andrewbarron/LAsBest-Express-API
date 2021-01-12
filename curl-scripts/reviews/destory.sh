@@ -1,5 +1,5 @@
 API="https://afternoon-wave-03144.herokuapp.com"
-URL_PATH="/reviews"
+URL_PATH="/reviews/${REVIEW_ID}"
 
 curl "${API}${URL_PATH}" \
   --include \
@@ -8,10 +8,6 @@ curl "${API}${URL_PATH}" \
   --data '{
     "review": {
       "restaurantId": "'"${REST_ID}"'",
-      "description": "'"${DESCRIPTION}"'",
-      "favoriteDish": "'"${FAVORITEDISH}"'"
-      "price": "'"${PRICE}"'",
-      "value": "'"${VALUE}"'",
     }
   }'
 

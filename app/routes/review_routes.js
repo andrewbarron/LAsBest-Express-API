@@ -9,6 +9,7 @@ router.post('/reviews', (req, res, next) => {
   // get the review data from the body of the request
   const reviewData = req.body.review
   const restaurantId = reviewData.restaurantId
+  reviewData.reviewer = req.user._id
   // find the restaurant by its id
   Restaurant.findById(restaurantId)
     // .then(handle404)
@@ -22,5 +23,37 @@ router.post('/reviews', (req, res, next) => {
     .then(restaurant => res.status(201).json({restaurant: restaurant}))
     .catch(next)
 })
+// DESTROY
+// DELETE /reviews/:id
+router.delete('/reviews/:reviewId', (req, res, next) => {
+  const reviewId = req.params.reviewId
+  const restaurantId = req.body.review.restaurantId
+  Restaurant.findById(restaurantId)
+    .then(restaurant => {
+      restaurant.reviews.id(reviewId).remove()
+      // Alternatively
+      // restaurants.reviews.pull(id)
 
+      return restaurant.save()
+    })
+    .then(() => res.sendStatus(204))
+    .catch(next)
+})
+
+// UPDATE
+// PATCH /reviews/:id
+router.patch('/reviews/:reviewId', (req, res, next) => {
+  const reviewId = req.params.reviewId
+  const reviewData = req.body.review
+  const restaurantId = reviewData.restaurantId
+
+  Restaurant.findById(restaurantId)
+    .then(restaurant => {
+      const review = restaurant.reviews.id(reviewId)
+      review.set(reviewData)
+      return restaurant.save()
+    })
+    .then(() => res.sendStatus(204))
+    .catch(next)
+})
 module.exports = router

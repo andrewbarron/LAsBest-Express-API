@@ -12,19 +12,20 @@ const handle404 = customErrors.handle404
 // create a restaurant
 router.post('/restaurants', requireToken, (req, res, next) => {
   // get data from request
-  const restaurantSuperData = req.body.restaurant
-  restaurantSuperData.owner = req.user._id
+  const restaurantData = req.body.restaurant
+  restaurantData.owner = req.user._id
   // create the restaurant
-  Restaurant.create(restaurantSuperData)
-    .then(restaurantSuperData => {
-      res.status(201).json({ restaurantSuperData })
+  Restaurant.create(restaurantData)
+    .then(restaurantData => {
+      res.status(201).json({ restaurantData })
     })
 })
 
 // index
 router.get('/restaurants', requireToken, (req, res, next) => {
-  Restaurant.find({ owner: req.user._id })
-    .populate('restaurant')
+  Restaurant.find()
+    .populate('owner')
+    .populate('reviews.reviewer')
     .then(restaurant => res.status(201).json({ restaurant: restaurant }))
     .catch(next)
 })
@@ -36,6 +37,8 @@ router.get('/restaurants/:id', requireToken, (req, res, next) => {
     _id: id,
     owner: req.user._id
   })
+    .populate('owner')
+    .populate('reviews.reviewer')
     .then(handle404)
     .then(restaurant => res.status(200).json({ restaurant: restaurant.toObject() }))
     .catch(next)
