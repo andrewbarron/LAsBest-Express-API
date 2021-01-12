@@ -7,7 +7,7 @@ curl "${API}${URL_PATH}" \
   --header "Content-Type: application/json" \
   --data '{
     "review": {
-      "restaurantId": "'"${REST_ID}"'",
+      "restaurantId": "'"${REST_ID}"'"
     }
   }'
 

@@ -11,7 +11,7 @@ curl "${API}${URL_PATH}" \
       "description": "'"${DESCRIPTION}"'",
       "favoriteDish": "'"${FAVORITEDISH}"'"
       "price": "'"${PRICE}"'",
-      "value": "'"${VALUE}"'",
+      "value": "'"${VALUE}"'"
     }
   }'
 

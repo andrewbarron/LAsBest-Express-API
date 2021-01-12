@@ -9,9 +9,9 @@ curl "${API}${URL_PATH}" \
     "review": {
       "restaurantId": "'"${REST_ID}"'",
       "description": "'"${DESCRIPTION}"'",
-      "favoriteDish": "'"${FAVORITEDISH}"'"
+      "favoriteDish": "'"${FAVORITEDISH}"'",
       "price": "'"${PRICE}"'",
-      "value": "'"${VALUE}"'",
+      "value": "'"${VALUE}"'"
     }
   }'
 
