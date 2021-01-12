@@ -38,7 +38,7 @@ router.get('/restaurants/:id', requireToken, (req, res, next) => {
     .populate('owner')
     .populate('reviews.reviewer')
     .then(handle404)
-    .then(restaurant => res.status(200).json({ restaurant: restaurant.toObject() }))
+    .then(restaurant => res.status(200).json({ restaurant: restaurant }))
     .catch(next)
 })
 
