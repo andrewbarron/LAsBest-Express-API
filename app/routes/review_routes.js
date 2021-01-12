@@ -27,13 +27,10 @@ router.post('/reviews', (req, res, next) => {
 // DELETE /reviews/:id
 router.delete('/reviews/:reviewId', (req, res, next) => {
   const reviewId = req.params.reviewId
-  const restaurantId = req.body.review.restaurantId
+  const restaurantId = req.body.restaurant.restaurantId
   Restaurant.findById(restaurantId)
     .then(restaurant => {
       restaurant.reviews.id(reviewId).remove()
-      // Alternatively
-      // restaurants.reviews.pull(id)
-
       return restaurant.save()
     })
     .then(() => res.sendStatus(204))
@@ -44,7 +41,7 @@ router.delete('/reviews/:reviewId', (req, res, next) => {
 // PATCH /reviews/:id
 router.patch('/reviews/:reviewId', (req, res, next) => {
   const reviewId = req.params.reviewId
-  const reviewData = req.body.review
+  const reviewData = req.body.restaurant
   const restaurantId = reviewData.restaurantId
 
   Restaurant.findById(restaurantId)

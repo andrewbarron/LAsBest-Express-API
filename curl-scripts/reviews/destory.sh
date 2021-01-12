@@ -3,7 +3,7 @@ URL_PATH="/reviews/${REVIEW_ID}"
 
 curl "${API}${URL_PATH}" \
   --include \
-  --request POST \
+  --request DELETE \
   --header "Content-Type: application/json" \
   --data '{
     "review": {

@@ -13,11 +13,11 @@ const handle404 = customErrors.handle404
 router.post('/restaurants', requireToken, (req, res, next) => {
   // get data from request
   const restaurantData = req.body.restaurant
-  restaurantData.owner = req.user._id
+  restaurantData.owner = req.user
   // create the restaurant
   Restaurant.create(restaurantData)
-    .then(restaurantData => {
-      res.status(201).json({ restaurantData })
+    .then(restaurant => {
+      res.status(201).json({ restaurant })
     })
 })
 
@@ -58,6 +58,8 @@ router.delete('/restaurants/:id', requireToken, (req, res, next) => {
 // PATCH /restaurants/:id
 router.patch('/restaurants/:id', requireToken, (req, res, next) => {
   const id = req.params.id
+  const restaurantData = req.body.restaurant
+  restaurantData.owner = req.user
   Restaurant.findOne({
     _id: id,
     owner: req.user._id

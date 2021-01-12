@@ -3,13 +3,13 @@ URL_PATH="/reviews/${REVIEW_ID}"
 
 curl "${API}${URL_PATH}" \
   --include \
-  --request POST \
+  --request PATCH \
   --header "Content-Type: application/json" \
   --data '{
     "review": {
       "restaurantId": "'"${REST_ID}"'",
       "description": "'"${DESCRIPTION}"'",
-      "favoriteDish": "'"${FAVORITEDISH}"'"
+      "favoriteDish": "'"${FAVORITEDISH}"'",
       "price": "'"${PRICE}"'",
       "value": "'"${VALUE}"'"
     }
