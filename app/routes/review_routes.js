@@ -1,11 +1,11 @@
 const express = require('express')
-// const passport = require('passport')
+const passport = require('passport')
 const router = express.Router()
-// const requireToken = passport.authenticate('bearer', { session: false })
+const requireToken = passport.authenticate('bearer', { session: false })
 const Restaurant = require('../models/restaurant')
 // const handle404 = require('../../lib/custom_errors')
 
-router.post('/reviews', (req, res, next) => {
+router.post('/reviews', requireToken, (req, res, next) => {
   // get the review data from the body of the request
   const reviewData = req.body.review
   const restaurantId = reviewData.restaurantId
@@ -23,9 +23,10 @@ router.post('/reviews', (req, res, next) => {
     .then(restaurant => res.status(201).json({restaurant: restaurant}))
     .catch(next)
 })
+
 // DESTROY
 // DELETE /reviews/:id
-router.delete('/reviews/:reviewId', (req, res, next) => {
+router.delete('/reviews/:reviewId', requireToken, (req, res, next) => {
   const reviewId = req.params.reviewId
   const restaurantId = req.body.review.restaurantId
   Restaurant.findById(restaurantId)
@@ -42,7 +43,7 @@ router.delete('/reviews/:reviewId', (req, res, next) => {
 
 // UPDATE
 // PATCH /reviews/:id
-router.patch('/reviews/:reviewId', (req, res, next) => {
+router.patch('/reviews/:reviewId', requireToken, (req, res, next) => {
   const reviewId = req.params.reviewId
   const reviewData = req.body.review
   const restaurantId = reviewData.restaurantId
