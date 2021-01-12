@@ -43,14 +43,13 @@ router.patch('/reviews/:reviewId', (req, res, next) => {
   const reviewId = req.params.reviewId
   const reviewData = req.body.restaurant
   const restaurantId = reviewData.restaurantId
-
   Restaurant.findById(restaurantId)
     .then(restaurant => {
       const review = restaurant.reviews.id(reviewId)
       review.set(reviewData)
       return restaurant.save()
     })
-    .then(() => res.sendStatus(204))
+    .then(review => res.status(201).json({ review: review }))
     .catch(next)
 })
 module.exports = router

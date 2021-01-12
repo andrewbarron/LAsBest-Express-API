@@ -22,10 +22,8 @@ router.post('/restaurants', requireToken, (req, res, next) => {
 })
 
 // index
-router.get('/restaurants', requireToken, (req, res, next) => {
+router.get('/restaurants', (req, res, next) => {
   Restaurant.find()
-    .populate('owner')
-    .populate('reviews.reviewer')
     .then(restaurant => res.status(201).json({ restaurant: restaurant }))
     .catch(next)
 })
