@@ -1,22 +1,24 @@
 const express = require('express')
 const passport = require('passport')
 const router = express.Router()
-const Restaurant = require('../models/restaurant')
 const requireToken = passport.authenticate('bearer', { session: false })
+const Restaurant = require('../models/restaurant')
+// const CustomerReview = require('../models/customerReview')
+// const User = require('../models/user')
 const customErrors = require('../../lib/custom_errors')
-const requireOwnership = customErrors.requireOwnership
+// const requireOwnership = customErrors.requireOwnership
 const handle404 = customErrors.handle404
 
 // create a restaurant
 router.post('/restaurants', requireToken, (req, res, next) => {
   // get data from request
-  const restaurantData = req.body.restaurant
-  // add user as restaurant owner
-  restaurantData.owner = req.user._id
+  const restaurantSuperData = req.body.restaurant
+  restaurantSuperData.owner = req.user._id
   // create the restaurant
-  Restaurant.create(restaurantData)
-    .then(restaurant => res.status(201).json({ restaurant: restaurant }))
-    .catch(next)
+  Restaurant.create(restaurantSuperData)
+    .then(restaurantSuperData => {
+      res.status(201).json({ restaurantSuperData })
+    })
 })
 
 // index
@@ -64,4 +66,24 @@ router.patch('/restaurants/:id', requireToken, (req, res, next) => {
     // if an error occurs, pass it to the handler
     .catch(next)
 })
+
+// // add customerReview to restaurant
+// router.patch('/restaurants/:restaurantId/customerReviews', requireToken, (req, res, next) => {
+//   // extract the restaurantId route parameter
+//   const restaurantId = req.params.restaurantId
+//   const customerId = req.user._id
+//   Restaurant.findById(restaurantId)
+//     .then(restaurant => {
+//       restaurant.customerReview.push(customerId)
+//       return restaurant.save()
+//     })
+//     .then(() => User.findById(customerId))
+//     .then(customer => {
+//       customer.restaurants.push(restaurantId)
+//       return customer.save()
+//     })
+//     .then(() => res.sendStatus(200))
+//     .catch(next)
+// })
+
 module.exports = router
