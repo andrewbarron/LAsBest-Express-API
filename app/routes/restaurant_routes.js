@@ -29,11 +29,10 @@ router.get('/restaurants', (req, res, next) => {
 })
 
 // show  /restaurant
-router.get('/restaurants/:id', requireToken, (req, res, next) => {
+router.get('/restaurants/:id', (req, res, next) => {
   const id = req.params.id
   Restaurant.findOne({
-    _id: id,
-    owner: req.user._id
+    _id: id
   })
     .populate('owner')
     .populate('reviews.reviewer')
