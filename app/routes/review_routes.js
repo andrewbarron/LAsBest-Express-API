@@ -41,15 +41,15 @@ router.delete('/reviews/:reviewId', (req, res, next) => {
 // PATCH /reviews/:id
 router.patch('/reviews/:reviewId', (req, res, next) => {
   const reviewId = req.params.reviewId
-  const reviewData = req.body.restaurant
-  const restaurantId = reviewData.restaurantId
+  const newReview = req.body.review
+  const restaurantId = req.body.restaurant.restaurantId
   Restaurant.findById(restaurantId)
     .then(restaurant => {
       const review = restaurant.reviews.id(reviewId)
-      review.set(reviewData)
+      review.set(newReview)
       return restaurant.save()
     })
-    .then(review => res.status(201).json({ review: review }))
+    .then(review => res.status(201).json({ review: newReview }))
     .catch(next)
 })
 module.exports = router

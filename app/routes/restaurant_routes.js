@@ -6,7 +6,7 @@ const Restaurant = require('../models/restaurant')
 // const CustomerReview = require('../models/customerReview')
 // const User = require('../models/user')
 const customErrors = require('../../lib/custom_errors')
-// const requireOwnership = customErrors.requireOwnership
+const requireOwnership = customErrors.requireOwnership
 const handle404 = customErrors.handle404
 
 // create a restaurant
@@ -46,7 +46,10 @@ router.get('/restaurants/:id', (req, res, next) => {
 router.delete('/restaurants/:id', requireToken, (req, res, next) => {
   const id = req.params.id
   Restaurant.findById(id)
-    .then(restaurant => restaurant.deleteOne())
+    .then(restaurant => {
+      requireOwnership(req, restaurant)
+      restaurant.deleteOne()
+    })
     .then(() => res.sendStatus(204))
     .catch(next)
 })
@@ -58,34 +61,18 @@ router.patch('/restaurants/:id', requireToken, (req, res, next) => {
   const restaurantData = req.body.restaurant
   restaurantData.owner = req.user
   Restaurant.findOne({
-    _id: id,
-    owner: req.user._id
+    _id: id
   })
   // Restaurant.findOneAndUpdate({ _id: id, owner: req.user._id }, req.body.restaurant)
-    .then(restaurant => restaurant.updateOne(req.body.restaurant))
+    .then(restaurant => {
+      requireOwnership(req, restaurant)
+      restaurant.updateOne(req.body.restaurant)
+    })
     // if that succeeded, return 204 and no JSON
     .then(() => res.status(200).json({ restaurant: req.body.restaurant }))
     // if an error occurs, pass it to the handler
     .catch(next)
 })
 
-// // add customerReview to restaurant
-// router.patch('/restaurants/:restaurantId/customerReviews', requireToken, (req, res, next) => {
-//   // extract the restaurantId route parameter
-//   const restaurantId = req.params.restaurantId
-//   const customerId = req.user._id
-//   Restaurant.findById(restaurantId)
-//     .then(restaurant => {
-//       restaurant.customerReview.push(customerId)
-//       return restaurant.save()
-//     })
-//     .then(() => User.findById(customerId))
-//     .then(customer => {
-//       customer.restaurants.push(restaurantId)
-//       return customer.save()
-//     })
-//     .then(() => res.sendStatus(200))
-//     .catch(next)
-// })
 
 module.exports = router
